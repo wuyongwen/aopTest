@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context  
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop  
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<context:component-scan base-package="com.spring.test"/>
+	<aop:aspectj-autoproxy/>
+	<!-- <context:property-placeholder ignore-unresolvable="true" location="classpath:database.properties" />
+ -->	
+ 	<bean id="propertyPlaceholderConfigurer"  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+	    <property name="locations">  
+	        <list>  
+	            <value>classpath:database.properties</value>  
+	        </list>  
+	    </property>  
+	</bean>
+	<!-- more bean definitions for data access objects go here -->
+	<bean class="com.spring.test.ConnectionBean">
+		<property name="driverClassName" value="${jdbc.driverClassName}"></property>
+		<property name="servers">
+			<list>
+				<value>${jdbc.driverClassName}</value>
+				<value>${jdbc.url}</value>
+			</list>
+		</property>
+	</bean>
+	<aop:config>
+		<!-- <aop:aspect ref="audience">
+			<aop:pointcut id="performance"
+				expression="execution(* com.spring.test.Performer.perform(..))" />
+			<aop:before pointcut-ref="performance" method="takeSeats" />
+			<aop:after pointcut-ref="performance"
+				method="applaud" />
+			<aop:after-returning pointcut-ref="performance"
+				method="applaud" />
+			<aop:after-throwing pointcut-ref="performance"
+				method="demandRefound" />
+		</aop:aspect> -->
+		<aop:aspect>
+			<aop:declare-parents 
+				types-matching="com.spring.test.Performer+"
+				implement-interface="com.spring.test.Contestant" 
+				delegate-ref="contestantDelegate"/>
+		</aop:aspect>
+	</aop:config>
+</beans>
