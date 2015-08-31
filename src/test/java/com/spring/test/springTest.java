@@ -19,6 +19,7 @@ public class springTest {
 		performer.perform();
 		Contestant c = (Contestant) performer;
 		c.receiveAward();
+		
 		System.out.println(bean.getDriverClassName());
 		System.out.println(Arrays.toString(bean.getServers().toArray(new String[0])));
 	}
